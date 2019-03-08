@@ -17,22 +17,36 @@ knitr::opts_chunk$set(
     fig.width=4.8, fig.height=3.6, echo=FALSE, warning=FALSE, message=FALSE)
 ```
 
+```{r libs}
+rm(list=ls())
+library(tidyverse)
+library(knitr)
+library(stargazer)
+```
+
 # R Markdown
 
 R Markdown is a great way to not only inspect your data but also share your research with others who may not be as technically inclined as yourself. It should be seen as a tool that streamlines the process between analysis and dissemination of your work.
 
-```{r table1}
+Building Nice tables is easy using the knitr package and the kable function. We can make tables as shown in the rmarkdown chunk as shown below and refernce a figure by using a comand like "@ref(tab:table1)" to refernce table \@ref(tab:table1). Note that we use the abbreviation tab for table, fig for plots and figures and eq for equations.
 
-library(tidyverse)
-library(knitr)
-library(stargazer)
-
-kable(summary(cars), caption = "My table", booktabs=T)
+```{r table1, echo=T, results='asis'}
+stargazer(cars, title = "My table",
+          align=TRUE, header = F, 
+          type = ifelse(knitr::is_latex_output(),"latex","html"),
+          label = knitr::opts_current$get("label"))
 ```
 
-```{r table2}
-kable(summary(iris[,1:4]), caption = "My table 2", booktabs=T)
+```{r table2, results='asis'}
+stargazer(iris[,1:4], title = "My table 2",
+          align=TRUE, header = F, 
+          type = ifelse(knitr::is_latex_output(),"latex","html"),
+          label = knitr::opts_current$get("label"))
 ```
+
+## Regression Tables
+
+For more complicated tables created using other packages or from your own latex or markdown we can add in label references by hand. Here we refernce a regression table using a modified version of the stargazer package Table \@ref(tab:table3).
 
 ```{r table3, results='asis'}
 # system('git clone https://github.com/cran/stargazer')
@@ -52,21 +66,20 @@ stargazer(linear.1,
 ```
 # Including Plots
 
-You can also embed plots, for example:
+You can also embed plots,  and refrence them too! See Figure \@ref(fig:pressure).
 
 ```{r pressure, echo=FALSE, fig.cap="\\label{fig:pressure} Exponential Growth"}
 plot(pressure)
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
-
+Same for Equation \@ref(eq:expo)
 
 \begin{equation}
 Y = \text{exp}(\beta_0 + \beta_1 X)
 (\#eq:expo)
 \end{equation}
 
-See equation \@ref(eq:expo) and Figure \@ref(fig:external) and table \@ref(tab:table3)
+External figures are a little harder to format but still doable like in  Figure \@ref(fig:external).
 
 ```{r external, fig.cap="\\label{fig:external} Exponential Growth", out.width="20%", out.height="20%"}
 f_ <- tempfile(fileext = ".jpeg")
