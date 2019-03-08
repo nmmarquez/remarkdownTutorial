@@ -1,0 +1,76 @@
+---
+title: "Writing Documents in RMarkdown"
+author: "Neal Marquez"
+date: "February 21, 2019"
+header-includes:
+   - \usepackage{dcolumn}
+output:
+  bookdown::html_document2:
+    fig_caption: yes
+    toc: no
+fig_width: 4.8
+fig_height: 3.6 
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+    fig.width=4.8, fig.height=3.6, echo=FALSE, warning=FALSE, message=FALSE)
+```
+
+# R Markdown
+
+R Markdown is a great way to not only inspect your data but also share your research with others who may not be as technically inclined as yourself. It should be seen as a tool that streamlines the process between analysis and dissemination of your work.
+
+```{r table1}
+
+library(tidyverse)
+library(knitr)
+library(stargazer)
+
+kable(summary(cars), caption = "My table", booktabs=T)
+```
+
+```{r table2}
+kable(summary(iris[,1:4]), caption = "My table 2", booktabs=T)
+```
+
+```{r table3, results='asis'}
+# system('git clone https://github.com/cran/stargazer')
+# system('cd stargazer && git pull -r https://github.com/jiewpeng/stargazer_bookdown')
+# devtools::install_git('stargazer')
+##  2 OLS models
+linear.1 <- lm(rating ~ complaints + privileges + learning + raises + critical,data=attitude)
+linear.2 <- lm(rating ~ complaints + privileges + learning, data=attitude)
+## create an indicator dependent variable, and run a probit model
+attitude$high.rating <- (attitude$rating > 70)
+probit.model <- glm(high.rating ~ learning + critical + advance, data=attitude,family = binomial(link = "probit"))
+stargazer(linear.1, 
+          linear.2, 
+          probit.model, title="Results", align=TRUE, header = F, 
+          type = ifelse(knitr::is_latex_output(),"latex","html"),
+          label = knitr::opts_current$get("label"))
+```
+# Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE, fig.cap="\\label{fig:pressure} Exponential Growth"}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+
+\begin{equation}
+Y = \text{exp}(\beta_0 + \beta_1 X)
+(\#eq:expo)
+\end{equation}
+
+See equation \@ref(eq:expo) and Figure \@ref(fig:external) and table \@ref(tab:table3)
+
+```{r external, fig.cap="\\label{fig:external} Exponential Growth", out.width="20%", out.height="20%"}
+f_ <- tempfile(fileext = ".jpeg")
+download.file(
+    "https://pbs.twimg.com/profile_images/426136263960190976/AuCq7Rhs_400x400.jpeg", f_)
+include_graphics(f_)
+```

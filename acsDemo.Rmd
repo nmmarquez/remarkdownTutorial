@@ -1,0 +1,53 @@
+---
+title: "ACS Explore"
+author: "Neal Marquez"
+date: "March 1, 2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+```{r}
+# library(tidycensus)
+# 
+# # api key needs to be your own ACS api key!
+# # you can get one here http://api.census.gov/data/key_signup.html
+# 
+# census_api_key("Your api key")
+# 
+# incomeVars <- paste0("B19013", c(LETTERS[1:9]), "_001E")
+# 
+# # downolad data the capture output stuff isnt neccesary its just to get rid 
+# # of the output
+# rawIncomeDF <- get_acs(
+#     geography="county", # I want county level data
+#     variables=incomeVars, # iwant the variables from this list
+#     year=2014, # from the 2014 acs
+#     geometry=TRUE)
+# 
+# renameVar <- c(B19013A_001="White", 
+#                B19013B_001="Black", 
+#                B19013C_001="AI", 
+#                B19013D_001="Asian", 
+#                B19013E_001="HIPI", 
+#                B19013F_001="Other", 
+#                B19013G_001="More",
+#                B19013H_001="White-Alone", 
+#                B19013I_001="Hispanic")
+# 
+# cleanedIncomeDF <- rawIncomeDF %>%
+#     mutate(race=renameVar[variable]) %>%
+#     rename(medIncome=estimate)
+
+rm(list=ls())
+library(tidyverse)
+library(knitr)
+library(stargazer)
+library(sf)
+library(plotly)
+
+```
